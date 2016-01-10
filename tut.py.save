@@ -1,0 +1,11 @@
+import gobject
+
+class Sender(gobject.Gobject):
+	def __init__(self):
+		self.__gobject_init__()
+
+gobject.type_register(Sender)
+gobject.signal_new("z_signal",Sender,gobject.SIGNAL_RUN_FIRST,gobject.TYPE_NONE,())
+
+class Receiver(gobject.Gobject):
+	def __init__
