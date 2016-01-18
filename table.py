@@ -1,60 +1,83 @@
-import gtk
+__author__ = 'rresol'
 
+#example table.py 
 
-class PyApp(gtk.Window):
+import pygtk
+import gtk    
+pygtk.require('2.0') #specifying to use pygtk 2.x even u 
+                     # pygtk 3.x
+
+class Table:
+    #Our callback.
+    #The data passed to this method is printef to stdout
+    def callback(self,widget,data=None):
+        print "Hello again -%s was presed" %data
+
+    #This call back quites the program
+    def delete_event(self,widget,event,data=None):
+        gtk.main_quit()
+        return False
 
     def __init__(self):
-        super(PyApp, self).__init__()
+        #Create a new Window
+        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 
-        self.set_title("Calculator")
-        self.set_size_request(250, 230)
-        self.set_position(gtk.WIN_POS_CENTER)
+        #Set the window title
+        self.window.set_title("Table")
 
-        vbox = gtk.VBox(False, 2)
-        
-        mb = gtk.MenuBar()
-        filemenu = gtk.Menu()
-        filem = gtk.MenuItem("File")
-        filem.set_submenu(filemenu)
-        mb.append(filem)
+        #set a handler for delete_event that immediately
+        #exits GTK.
+        self.window.connect("delete_event",self.delete_event)
 
-        vbox.pack_start(mb, False, False, 0)
+        #Sets the border width of the window.
+        self.window.set_border_width(20)
 
-        table = gtk.Table(5, 4, True)
+        #Create a 2x2 table
+        table = gtk.Table(2,2,True)
 
-        table.attach(gtk.Button("Cls"), 0, 1, 0, 1)
-        table.attach(gtk.Button("Bck"), 1, 2, 0, 1)
-        table.attach(gtk.Label(), 2, 3, 0, 1)
-        table.attach(gtk.Button("Close"), 3, 4, 0, 1)
+        #Put the table in the main window
+        self.window.add(table)
 
-        table.attach(gtk.Button("7"), 0, 1, 1, 2)
-        table.attach(gtk.Button("8"), 1, 2, 1, 2)
-        table.attach(gtk.Button("9"), 2, 3, 1, 2)
-        table.attach(gtk.Button("/"), 3, 4, 1, 2)
+        #Create the first button 
+        button = gtk.Button("button 1")
 
-        table.attach(gtk.Button("4"), 0, 1, 2, 3)
-        table.attach(gtk.Button("5"), 1, 2, 2, 3)
-        table.attach(gtk.Button("6"), 2, 3, 2, 3)
-        table.attach(gtk.Button("*"), 3, 4, 2, 3)
+        #When the button is clicked we call the "callback" method.
+        #with a pointer to button 1 as its argument.
+        button.connect("clicked",self.callback,"button 1")
 
-        table.attach(gtk.Button("1"), 0, 1, 3, 4)
-        table.attach(gtk.Button("2"), 1, 2, 3, 4)
-        table.attach(gtk.Button("3"), 2, 3, 3, 4)
-        table.attach(gtk.Button("-"), 3, 4, 3, 4)
+        #Insert button 1 to upper left quadrant of the table.
+        table.attach(button,0,1,0,1)
 
-        table.attach(gtk.Button("0"), 0, 1, 4, 5)
-        table.attach(gtk.Button("."), 1, 2, 4, 5)
-        table.attach(gtk.Button("="), 2, 3, 4, 5)
-        table.attach(gtk.Button("+"), 3, 4, 4, 5)
+        button.show()
 
-        vbox.pack_start(gtk.Entry(), False, False, 0)
-        vbox.pack_end(table, True, True, 0)
+        #Create a second button
+        button = gtk.Button("button 2")
 
-        self.add(vbox)
+        #When the button is clicked , we call the "callback" method
+        #with a pointer to "button 2" as its argument
+        button.connect("clicked",self.callback,"button 2")
+        #Insert button 2 into the upper right quadrant of the table
+        table.attach(button,1,2,0,1)
 
-        self.connect("destroy", gtk.main_quit)
-        self.show_all()
-        
+        button.show()
 
-PyApp()
-gtk.main()
+        #Create "Quit" button
+        button = gtk.Button("Quit")
+        button.connect("clicked",lambda w: gtk.main_quit())
+
+        #insert the quit button into the both lower quadrants of the table.
+        table.attach(button,0,2,1,2)
+
+        button.show()
+
+        table.show()
+        self.window.show()
+
+def main():
+    gtk.main()
+    return 0
+
+if __name__ == '__main__':
+    Table()
+    main()
+
