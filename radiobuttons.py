@@ -60,7 +60,7 @@ class RadioButtons:
 		box2.pack_start(button,True,True,0)
 		button.set_flags(gtk.CAN_DEFAULT)
 		button.grab_default()
-		button.show()
+		button.show()der
 		self.window.show()
 
 def main():
